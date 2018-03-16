@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.ViewGroup;
+
 import com.thoughtbot.expandablerecyclerview.listeners.ExpandCollapseListener;
 import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener;
@@ -13,10 +14,11 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableList;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableListPosition;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
+
 import java.util.List;
 
 public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder, CVH extends ChildViewHolder>
-    extends RecyclerView.Adapter implements ExpandCollapseListener, OnGroupClickListener {
+        extends RecyclerView.Adapter implements ExpandCollapseListener, OnGroupClickListener {
 
   private static final String EXPAND_STATE_MAP = "expandable_recyclerview_adapter_expand_state_map";
 
@@ -37,8 +39,8 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * to the appropriate implementation of either {@link #onCreateGroupViewHolder(ViewGroup, int)}
    * or {@link #onCreateChildViewHolder(ViewGroup, int)}}.
    *
-   * @param parent The {@link ViewGroup} into which the new {@link android.view.View}
-   * will be added after it is bound to an adapter position.
+   * @param parent   The {@link ViewGroup} into which the new {@link android.view.View}
+   *                 will be added after it is bound to an adapter position.
    * @param viewType The view type of the new {@code android.view.View}.
    * @return Either a new {@link GroupViewHolder} or a new {@link ChildViewHolder}
    * that holds a {@code android.view.View} of the given view type.
@@ -66,9 +68,9 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * ExpandableGroup)}
    * or {@link #onBindChildViewHolder(ChildViewHolder, int, ExpandableGroup, int)}.
    *
-   * @param holder Either the GroupViewHolder or the ChildViewHolder to bind data to
+   * @param holder   Either the GroupViewHolder or the ChildViewHolder to bind data to
    * @param position The flat position (or index in the list of {@link
-   * ExpandableList#getVisibleItemCount()} in the list at which to bind
+   *                 ExpandableList#getVisibleItemCount()} in the list at which to bind
    */
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
@@ -115,7 +117,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * Called when a group is expanded
    *
    * @param positionStart the flat position of the first child in the {@link ExpandableGroup}
-   * @param itemCount the total number of children in the {@link ExpandableGroup}
+   * @param itemCount     the total number of children in the {@link ExpandableGroup}
    */
   @Override
   public void onGroupExpanded(int positionStart, int itemCount) {
@@ -137,7 +139,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * Called when a group is collapsed
    *
    * @param positionStart the flat position of the first child in the {@link ExpandableGroup}
-   * @param itemCount the total number of children in the {@link ExpandableGroup}
+   * @param itemCount     the total number of children in the {@link ExpandableGroup}
    */
   @Override
   public void onGroupCollapsed(int positionStart, int itemCount) {
@@ -187,6 +189,24 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
   }
 
   /**
+   * Explicitly expand a group. Expanding already expandend groups does nothing.
+   *
+   * @param group the {@link ExpandableGroup} being expanded
+   */
+  public void expandGroup(ExpandableGroup group) {
+    expandCollapseController.expandGroup(group);
+  }
+
+  /**
+   * Explicitly collapse a group. Collapsing already collapsed groups does nothing.
+   *
+   * @param group the {@link ExpandableGroup} being expanded
+   */
+  public void collapseGroup(ExpandableGroup group) {
+    expandCollapseController.collapseGroup(group);
+  }
+
+  /**
    * @param flatPos the flattened position of an item in the list
    * @return true if {@code group} is expanded, false if it is collapsed
    */
@@ -212,7 +232,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * instance state bundle to be used in {@link #onRestoreInstanceState(Bundle)}.
    *
    * @param savedInstanceState The {@code Bundle} into which to store the
-   * expanded state map
+   *                           expanded state map
    */
   public void onSaveInstanceState(Bundle savedInstanceState) {
     savedInstanceState.putBooleanArray(EXPAND_STATE_MAP, expandableList.expandedGroupIndexes);
@@ -228,7 +248,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * <p>
    *
    * @param savedInstanceState The {@code Bundle} from which the expanded
-   * state map is loaded
+   *                           state map is loaded
    */
   public void onRestoreInstanceState(Bundle savedInstanceState) {
     if (savedInstanceState == null || !savedInstanceState.containsKey(EXPAND_STATE_MAP)) {
@@ -259,7 +279,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * Called from {@link #onCreateViewHolder(ViewGroup, int)} when  the list item created is a group
    *
    * @param viewType an int returned by {@link ExpandableRecyclerViewAdapter#getItemViewType(int)}
-   * @param parent the {@link ViewGroup} in the list for which a {@link GVH}  is being created
+   * @param parent   the {@link ViewGroup} in the list for which a {@link GVH}  is being created
    * @return A {@link GVH} corresponding to the group list item with the  {@code ViewGroup} parent
    */
   public abstract GVH onCreateGroupViewHolder(ViewGroup parent, int viewType);
@@ -268,7 +288,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * Called from {@link #onCreateViewHolder(ViewGroup, int)} when the list item created is a child
    *
    * @param viewType an int returned by {@link ExpandableRecyclerViewAdapter#getItemViewType(int)}
-   * @param parent the {@link ViewGroup} in the list for which a {@link CVH}  is being created
+   * @param parent   the {@link ViewGroup} in the list for which a {@link CVH}  is being created
    * @return A {@link CVH} corresponding to child list item with the  {@code ViewGroup} parent
    */
   public abstract CVH onCreateChildViewHolder(ViewGroup parent, int viewType);
@@ -279,13 +299,15 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * <p>
    * Bind data to the {@link CVH} here.
    *
-   * @param holder The {@code CVH} to bind data to
+   * @param holder       The {@code CVH} to bind data to
    * @param flatPosition the flat position (raw index) in the list at which to bind the child
-   * @param group The {@link ExpandableGroup} that the the child list item belongs to
-   * @param childIndex the index of this child within it's {@link ExpandableGroup}
+   * @param group        The {@link ExpandableGroup} that the the child list item belongs to
+   * @param childIndex   the index of this child within it's {@link ExpandableGroup}
    */
-  public abstract void onBindChildViewHolder(CVH holder, int flatPosition, ExpandableGroup group,
-      int childIndex);
+  public abstract void onBindChildViewHolder(
+          CVH holder, int flatPosition, ExpandableGroup group,
+          int childIndex
+  );
 
   /**
    * Called from onBindViewHolder(RecyclerView.ViewHolder, int) when the list item bound to is a
@@ -293,9 +315,9 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
    * <p>
    * Bind data to the {@link GVH} here.
    *
-   * @param holder The {@code GVH} to bind data to
+   * @param holder       The {@code GVH} to bind data to
    * @param flatPosition the flat position (raw index) in the list at which to bind the group
-   * @param group The {@link ExpandableGroup} to be used to bind data to this {@link GVH}
+   * @param group        The {@link ExpandableGroup} to be used to bind data to this {@link GVH}
    */
   public abstract void onBindGroupViewHolder(GVH holder, int flatPosition, ExpandableGroup group);
 }
